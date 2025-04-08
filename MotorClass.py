@@ -3,10 +3,11 @@ import threading # MULTI THREADING FOR EFFIN SERVOS XAXAXAXAXA
 from adafruit_servokit import ServoKit
 
 class Motor:
-    def __init__(self, bitmask: int, continuous_servos_mask: int = 0):
+    def __init__(self, bitmask: int, continuous_servos_mask: int = 0, debug: bool = False):
         self.kit = ServoKit(channels=16)
         self.connected_servos = []
         self.continuous_servos = []
+        self.debug = debug
 
         for bit in range(16):
             channel = 15 - bit  # bit 15 maps to channel 0
@@ -17,7 +18,8 @@ class Motor:
 
     def setMotor(self, motorid, angle):
         if motorid not in self.connected_servos:
-            print(f"Motor channel {motorid} not enabled.")
+            if self.debug:
+                print(f"Motor channel {motorid} not enabled.")
             return
 
         thread = threading.Thread(target=self._set_motor_internal, args=(motorid, angle))
@@ -26,8 +28,10 @@ class Motor:
 
     def _set_motor_internal(self, motorid, angle):
         if motorid in self.continuous_servos:
-            print(f"Setting continuous motor {motorid} throttle to {angle}")
+            if self.debug:
+                print(f"Setting continuous motor {motorid} throttle to {angle}")
             self.kit.continuous_servo[motorid].throttle = angle
         else:
-            print(f"Setting servo motor {motorid} angle to {angle}")
+            if self.debug:
+                print(f"Setting servo motor {motorid} angle to {angle}")
             self.kit.servo[motorid].angle = angle

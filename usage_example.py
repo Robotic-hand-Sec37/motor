@@ -1,9 +1,10 @@
 from MotorClass import Motor
 import time
 if __name__ == "__main__":
-    # Channels 0, 4, 8, 12 enabled (bits 15, 11, 7, 3 → value = 0b1000100010001000 = 34952)
-    # Channel 12 is continuous (bit 3 → 0b0000000000001000 = 8)
-    motor = Motor(bitmask=0b1000100010001000, continuous_servos_mask=0b0000000000001000)
+    # Param1: Channels 0, 4, 8, 12 enabled (bits 15, 11, 7, 3 → value = 0b1000100010001000 = 34952)
+    # Param2: 12 is continuous (bit 3 → 0b0000000000001000 = 8)
+    # Param3 (optional): debug=True (default False)
+    motor = Motor(bitmask=34952, continuous_servos_mask=8)
 
     try:
         while True:
